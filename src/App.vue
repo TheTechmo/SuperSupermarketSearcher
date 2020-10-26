@@ -4,9 +4,20 @@
             <el-main>
                 <el-row :gutter="20">
                     <el-col :span="12" :offset="6">
+                        <h1>Super Supermarket Searcher</h1>
+                        <p id="description">Select the amount of items you would like returned, enter your search term, wait a few seconds
+                        and your search results will appear below! Select a product from each supermarket to compare with
+                        each other and they will display, sorted by price, on the right.</p>
                         <el-input placeholder="Search for a product" type="text"
-                                  v-model="searchTerm"></el-input>
-                        <el-divider></el-divider>
+                                  v-model="searchTerm">
+                            <el-select v-model="max" slot="prepend" placeholder="Amount" style="width: 75px;">
+                                <el-option label="10" value="10"></el-option>
+                                <el-option label="25" value="25"></el-option>
+                                <el-option label="50" value="50"></el-option>
+                                <el-option label="All" value="999999"></el-option>
+                            </el-select>
+                        </el-input>
+                        <el-divider id="divider"></el-divider>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
@@ -51,7 +62,8 @@ export default {
             nwTableData: null,
             pnsTableData: null,
             cdTableData: null,
-            selectedRows: []
+            selectedRows: [],
+            max: 10
         }
     },
     methods: {
@@ -70,7 +82,7 @@ export default {
             axios.get('http://localhost:7654/all', {
                 params: {
                     search: this.searchTerm,
-                    max: 10
+                    max: this.max
                 }
             }).then(function(response) {
                 I.nwTableData = response.data['newworld']
@@ -123,12 +135,20 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    /*margin-top: 60px;*/
 }
 
 .supermarket-banner img {
     width: auto;
     height: auto;
     max-height: 60px !important;
+}
+
+p#description {
+    margin-bottom: 50px;
+}
+
+#divider {
+    margin-bottom: 50px;
 }
 </style>

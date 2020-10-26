@@ -20,7 +20,10 @@
         <el-table-column
                 prop="name"
                 label="Product"
-        >
+                >
+            <template slot-scope="scope">
+                <a target="_blank" class="el-link" :href="scope.row.link">{{ scope.row.name }}</a>
+            </template>
         </el-table-column>
         <el-table-column
                 prop="size"
