@@ -23,7 +23,10 @@
                 label="Product"
         >
             <template slot-scope="scope">
-                <a target="_blank" class="el-link" :href="scope.row.link">{{ scope.row.name }}</a>
+                {{ scope.row.name }}
+                <a target="_blank" class="el-link" :href="scope.row.link">
+                    <el-button size="mini" icon="el-icon-top-right" class="bg-coral button-square"></el-button>
+                </a>
             </template>
         </el-table-column>
         <el-table-column

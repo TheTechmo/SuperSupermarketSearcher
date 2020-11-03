@@ -22,7 +22,11 @@
                 label="Product"
                 >
             <template slot-scope="scope">
-                <a target="_blank" class="el-link" :href="scope.row.link">{{ scope.row.name }}</a>
+                {{ scope.row.name }}
+                <a target="_blank" class="el-link" :href="scope.row.link">
+                    <el-button size="mini" icon="el-icon-top-right" class="bg-coral button-square"></el-button>
+                </a>
+
             </template>
         </el-table-column>
         <el-table-column
@@ -78,6 +82,15 @@ img.search-result-img {
 
 .table-price::before {
     content: "$"
+}
+
+.bg-coral.button-square {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+}
+
+tr.el-table__row {
+    cursor: pointer;
 }
 
 /*.el-table {*/

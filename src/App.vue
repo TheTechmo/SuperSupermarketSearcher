@@ -5,18 +5,23 @@
                 <el-row :gutter="20">
                     <el-col :span="12" :offset="6">
                         <h1>Super Supermarket Searcher</h1>
-                        <p id="description">Select the amount of items you would like returned, enter your search term, wait a few seconds
+                        <p id="description">Select the amount of items you would like returned, enter your search term,
+                            hit enter or press the search button to the right, wait a few seconds
                         and your search results will appear below! Select a product from each supermarket to compare with
                         each other and they will display, sorted by price, on the right.</p>
-                        <el-input placeholder="Search for a product" type="text"
+                        <el-form @submit.native.prevent="refreshTables" id="searchBarForm">
+                            <el-input placeholder="Search for a product" type="text" id="searchBar"
                                   v-model="searchTerm">
-                            <el-select v-model="max" slot="prepend" placeholder="Amount" style="width: 75px;">
+                            <el-select class="bg-coral bg-cut-r" v-model="max" slot="prepend" placeholder="Amount" style="width: 75px;">
                                 <el-option label="10" value="10"></el-option>
                                 <el-option label="25" value="25"></el-option>
                                 <el-option label="50" value="50"></el-option>
                                 <el-option label="All" value="999999"></el-option>
                             </el-select>
+                            <el-button class="bg-coral bg-cut-l" native-type="submit" slot="append" icon="el-icon-search">
+                            </el-button>
                         </el-input>
+                        </el-form>
                         <el-divider id="divider"></el-divider>
                     </el-col>
                 </el-row>
@@ -50,7 +55,6 @@
 import ResultsTable from "@/components/ResultsTable";
 import CompareTable from "@/components/CompareTable";
 const axios = require('axios')
-const _ = require('lodash')
 
 export default {
     name: 'App',
@@ -71,7 +75,7 @@ export default {
             console.log("refreshing tables")
             const I = this;
             this.selectedRows = []
-            if (this.searchTerm === '') {
+            if (this.searchTerm.trim() === '') {
                 I.nwTableData = null;
                 I.pnsTableData = null;
                 I.cdTableData = null;
@@ -79,7 +83,7 @@ export default {
             }
 
             this.loading = true;
-            axios.get('http://localhost:7654/all', {
+            axios.get('https://supermarketsearcher.apis.zachb.nz/all', {
                 params: {
                     search: this.searchTerm,
                     max: this.max
@@ -116,26 +120,67 @@ export default {
     },
     watch: {
         searchTerm() {
-            console.log("Watching searchterm")
-            this.fetchAPI()
+            if (this.searchTerm.trim() === '') {
+                this.selectedRows = []
+                this.nwTableData = null
+                this.pnsTableData = null
+                this.cdTableData = null
+            }
         }
-    },
-    created() {
-        this.fetchAPI = _.debounce(function() {
-                this.refreshTables()
-            }, 1000)
     }
 }
 </script>
 
 <style>
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    border-top: 20px solid lightcoral;
     /*margin-top: 60px;*/
+}
+
+#app, body {
+        font-family: Avenir, Helvetica, Arial, sans-serif !important;
+}
+
+body {
+    margin: 0 !important;
+
+}
+
+#searchBar {
+    border: none;
+}
+
+#searchBarForm .el-input-group__append, #searchBarForm .el-input-group__prepend {
+    border: none !important;
+}
+
+#searchBar input:active {
+    outline: none !important;
+}
+
+.bg-coral {
+    background: lightcoral !important;
+}
+
+.bg-coral, .bg-coral *, .bg-cut-r .el-input__icon:before {
+    color: white;
+}
+
+.bg-cut-r {
+    border-right: none !important;
+    border-radius: 4px !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.bg-cut-l {
+    border-left: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
 }
 
 .supermarket-banner img {
@@ -143,6 +188,7 @@ export default {
     height: auto;
     max-height: 60px !important;
 }
+
 
 p#description {
     margin-bottom: 50px;
