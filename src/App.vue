@@ -66,15 +66,14 @@ export default {
             nwTableData: null,
             pnsTableData: null,
             cdTableData: null,
-            selectedRows: [],
+            selectedRows: null,
             max: 10
         }
     },
     methods: {
         refreshTables() {
-            console.log("refreshing tables")
             const I = this;
-            this.selectedRows = []
+            this.selectedRows = null
             if (this.searchTerm.trim() === '') {
                 I.nwTableData = null;
                 I.pnsTableData = null;
@@ -97,6 +96,12 @@ export default {
             }).finally(() => this.loading = false)
         },
         onRowSelect(val, id) {
+            if (val == null) {
+                return
+            }
+            if (this.selectedRows == null) {
+                this.selectedRows = {}
+            }
             this.$set(this.selectedRows, id, val)
         },
         getImage(name, type) {
@@ -105,12 +110,20 @@ export default {
     },
     computed: {
        compareTableData() {
+           const selectedRows = this.selectedRows
            let ret = []
-           for (let key in this.selectedRows) {
-               let rows = Object.assign({}, this.selectedRows)
 
-               rows[key]['supermarket'] = key
-               ret.push(this.selectedRows[key])
+           if (selectedRows == null) {
+                return ret
+            }
+
+           for (let key in selectedRows) {
+               let rows = Object.assign({}, selectedRows)
+
+               if (key in rows) {
+                   rows[key]['supermarket'] = key
+                   ret.push(selectedRows[key])
+               }
            }
            ret.sort((a, b) => {
                return parseFloat(a.price) - parseFloat(b.price)
@@ -121,12 +134,12 @@ export default {
     watch: {
         searchTerm() {
             if (this.searchTerm.trim() === '') {
-                this.selectedRows = []
                 this.nwTableData = null
                 this.pnsTableData = null
                 this.cdTableData = null
+                this.selectedRows = null
             }
-        }
+        },
     }
 }
 </script>

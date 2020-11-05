@@ -2,8 +2,6 @@
     <el-table
             :data="data"
             height="500"
-            highlight-current-row
-            @current-change="onSelectedRowChange"
             empty-text="Select products to compare"
             style="width: 100%"
     >
@@ -50,16 +48,11 @@
 
 <script>
 export default {
-    name: "ResultsTable",
+    name: "CompareTable",
     props: [
         'data',
         'loading'
     ],
-    methods: {
-        onSelectedRowChange(val) {
-            this.$emit('row-selected', val)
-        }
-    }
 }
 </script>
 
