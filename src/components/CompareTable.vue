@@ -5,17 +5,24 @@
             empty-text="Select products to compare"
             style="width: 100%"
     >
+
+        <!-- Product thumbnail image -->
         <el-table-column
                 prop="thumbnail"
         >
             <template slot-scope="scope">
                 <div class="thumbnail-cell">
+                    <!-- Thumbnail -->
                     <img class="search-result-img" :src="scope.row.thumbnail" :alt="scope.row.name">
+
+                    <!-- Supermarket logo badge -->
                     <img class="supermarket-badge-img" :src="`./assets/img/${scope.row.supermarket}-icon.png`"
                          :alt="scope.row.supermarket">
                 </div>
             </template>
         </el-table-column>
+
+        <!-- Product name -->
         <el-table-column
                 prop="name"
                 label="Product"
@@ -27,11 +34,15 @@
                 </a>
             </template>
         </el-table-column>
+
+        <!-- Product size -->
         <el-table-column
                 prop="size"
                 label="Size"
         >
         </el-table-column>
+
+        <!-- Product price -->
         <el-table-column
                 prop="price"
                 label="Price"
@@ -39,6 +50,8 @@
         >
             <template slot-scope="scope">
                 <span class="table-price">
+
+                    <!-- Ensure price is displayed as 2 decimal -->
                     <strong>{{ parseFloat(scope.row.price).toFixed(2) }}</strong>
                 </span>
             </template>
@@ -57,15 +70,20 @@ export default {
 </script>
 
 <style>
+
+/* Broken words break on space, not letter */
 .el-table .cell {
     word-break: break-word !important;
 }
 
+/* Thumbnail size */
 img.search-result-img {
     /*max-height: 100px;*/
     max-width: 100%;
 }
 
+
+/* Supermarket icon badge size */
 img.supermarket-badge-img {
     height: 25px;
     position: absolute;
@@ -74,22 +92,15 @@ img.supermarket-badge-img {
     margin-left: -30px;
 }
 
+/* Center thumbnail */
 .thumbnail-cell {
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
 }
 
+/* Prices prepended with '$'
 .table-price::before {
     content: "$"
 }
-
-/*.el-table {*/
-/*    max-height: 500px;*/
-/*    overflow-y: scroll !important;*/
-/*}*/
-
-/*.el-table * {*/
-/*    overflow-y: scroll !important;*/
-/*}*/
 </style>
